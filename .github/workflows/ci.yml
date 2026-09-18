@@ -1,40 +1,43 @@
-name: Rama Tools CI
+name: Build and Deploy to cPanel
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main # Workflow berjalan otomatis saat Anda push ke branch main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Menggunakan Node.js versi 20
 
-    - name: Install dependencies
-      run: npm ci
+      - name: 📦 Install Dependencies
+        run: npm install
 
-    - name: Generate Prisma Client
-      run: npx prisma generate
+      - name: 🔨 Build Next.js Project
+        run: npm run build
 
-    - name: Type Check
-      run: npx tsc --noEmit
+      - name: 🗜️ Create ZIP Archive
+        run: |
+          echo "Membuat folder penampung ZIP..."
+          mkdir -p ./deploy-folder
+          
+          echo "Mengompres .next, node_modules, public, dan konfigurasi menjadi 1 file ZIP..."
+          # Command zip ini hanya membungkus file yang dibutuhkan server cPanel
+          zip -r ./deploy-folder/build-ramahaxor.zip .next node_modules public package.json next.config.mjs
 
-    - name: Run Linter
-      run: npm run lint
-
-    - name: Build Project
-      run: npm run build
-      env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-        NEXTAUTH_URL: http://localhost:3000
+      - name: 🚀 Upload ZIP to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy-folder/
+          server-dir: /ramahaxor.my.id/

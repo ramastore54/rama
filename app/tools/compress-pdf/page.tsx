@@ -32,7 +32,7 @@ export default function CompressPDF() {
       // dan objek sampah yang tidak terpakai (Basic Compression)
       const pdfBytes = await pdfDoc.save({ useObjectStreams: true });
       
-      const compressedBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const compressedBlob = new Blob([pdfBytes as any], { type: 'application/pdf' });
       setResultSize(compressedBlob.size);
 
       // Trigger Download
