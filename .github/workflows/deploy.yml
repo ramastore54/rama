@@ -1,0 +1,61 @@
+name: Build and Deploy to cPanel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🔨 Build Next.js Project
+        run: npm run build
+
+      - name: 📝 Generate server.js
+        run: |
+          cat << 'SERVER' > server.js
+          const { createServer } = require('http');
+          const { parse } = require('url');
+          const next = require('next');
+          
+          const app = next({ dev: false });
+          const handle = app.getRequestHandler();
+          
+          app.prepare().then(() => {
+            createServer((req, res) => {
+              const parsedUrl = parse(req.url, true);
+              handle(req, res, parsedUrl);
+            }).listen(process.env.PORT || 3000, (err) => {
+              if (err) throw err;
+              console.log('> Ready on port ' + (process.env.PORT || 3000));
+            });
+          });
+          SERVER
+
+      - name: 🗜️ Create ZIP Archive (Tanpa node_modules)
+        run: |
+          mkdir -p ./deploy-folder
+          echo "Mengompres file (Mengabaikan folder node_modules)..."
+          zip -r ./deploy-folder/build-ramahaxor.zip .next public package.json next.config.mjs server.js
+
+      - name: 🚀 Upload ZIP to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy-folder/
+          server-dir: /ramahaxor.my.id/
