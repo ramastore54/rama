@@ -1,69 +1,89 @@
-import Image from "next/image";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { FileText, FileSearch, PenTool, ArrowRight } from 'lucide-react';
+
+// ==========================================
+// TAG SEO (Metadata) untuk Indexing Google
+// ==========================================
+export const metadata: Metadata = {
+  title: 'Rama Tools | Platform Produktivitas All-in-One',
+  description: 'Selamat datang di tools rama.id. Nikmati fitur PDF Suite, CV Builder instan, dan ATS Scanner secara gratis dan aman langsung dari browser Anda.',
+  keywords: ['Rama Tools', 'rama.id', 'PDF Tools', 'Merge PDF', 'PDF Scanner', 'CV Builder', 'ATS Scanner', 'CV Maker Indonesia'],
+  openGraph: {
+    title: 'Rama Tools Productivity Suite',
+    description: 'Platform All-in-One untuk kebutuhan dokumen Anda.',
+    url: 'https://ramahaxor.my.id',
+    siteName: 'RAMADEV.ID',
+    locale: 'id_ID',
+    type: 'website',
+  },
+};
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="flex flex-col items-center justify-center min-h-[90vh] px-4 text-center relative overflow-hidden">
+      {/* Background Gradient & Glass Effect */}
+      <div className="absolute top-0 -z-10 h-full w-full bg-slate-50">
+        <div className="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[20%] translate-y-[10%] rounded-full bg-blue-400/20 opacity-60 blur-[100px]"></div>
+        <div className="absolute top-auto right-auto left-0 bottom-0 h-[500px] w-[500px] translate-x-[10%] -translate-y-[10%] rounded-full bg-indigo-400/20 opacity-60 blur-[100px]"></div>
+      </div>
+      
+      {/* Badge Sambutan */}
+      <div className="mt-16 mb-6 inline-flex items-center gap-2 px-5 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-semibold shadow-sm">
+        <span className="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span>
+        Selamat datang di tools rama.id
+      </div>
+
+      <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 max-w-4xl">
+        All Your Productivity <br className="hidden md:block"/>
+        Tools in <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">One Place</span>
+      </h1>
+      
+      {/* Deskripsi & Daftar Fitur */}
+      <p className="text-lg md:text-xl text-slate-600 max-w-2xl mb-12 leading-relaxed">
+        Tingkatkan produktivitas Anda tanpa batas. Platform kami menyediakan fitur <strong>PDF Suite</strong> (Scanner & Merger), <strong>CV Builder</strong> untuk membuat riwayat hidup instan, dan <strong>ATS Scanner</strong> untuk menganalisis loker. Semua proses berjalan cepat dan aman langsung di browser Anda.
+      </p>
+      
+      {/* Tombol Aksi */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-24 w-full sm:w-auto">
+        <Link href="/tools" className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-semibold hover:bg-slate-800 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 group">
+          <FileText size={20} />
+          Mulai Gunakan Tools
+          <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+        </Link>
+      </div>
+
+      {/* Feature Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full pb-16">
+        <FeatureCard 
+          icon={<FileText size={32}/>} 
+          title="PDF Suite" 
+          desc="Modifikasi dokumen dengan fitur Merge PDF untuk menggabungkan file dan PDF Scanner untuk membaca metadata tersembunyi." 
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        <FeatureCard 
+          icon={<PenTool size={32}/>} 
+          title="CV Builder Instan" 
+          desc="Ketik data diri Anda dan langsung unduh (Download) menjadi file PDF profesional tanpa perlu mendaftar akun." 
+        />
+        <FeatureCard 
+          icon={<FileSearch size={32}/>} 
+          title="ATS Scanner" 
+          desc="Analisis kecocokan kata kunci antara isi CV Anda dengan deskripsi lowongan pekerjaan (Job Desc) secara transparan." 
+        />
+      </div>
+    </div>
+  );
+}
+
+// Komponen Kartu Fitur
+function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
+  return (
+    <div className="p-8 bg-white/60 backdrop-blur-xl rounded-3xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-left hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
+      <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 shadow-sm">
+        {icon}
+      </div>
+      <h3 className="text-xl font-bold text-slate-900 mb-3">{title}</h3>
+      <p className="text-slate-600 text-sm leading-relaxed">{desc}</p>
     </div>
   );
 }
